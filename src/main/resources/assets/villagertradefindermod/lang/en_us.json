@@ -1,0 +1,21 @@
+{
+  "villagertradefindermod.category.title": "Villager Trade Finder",
+
+  "villagertradefindermod.key.config": "Villager Trade Finder GUI",
+  "villagertradefindermod.key.start": "Toggle TradeFinder",
+
+  "villagertradefindermod.config.title": "Villager Trade Finder Config",
+  "villagertradefindermod.config.category": "What is this??",
+  "villagertradefindermod.config.perfecttrade": "Search for Perfect Trade",
+  "villagertradefindermod.config.assumeautotool": "Assume Auto Tool",
+  "villagertradefindermod.config.itemtosearch": "Item to search",
+  "villagertradefindermod.config.enchantmenttosearch": "Enchantment to search",
+
+  "villagertradefindermod.action.noground": "You are not looking at the ground",
+  "villagertradefindermod.action.notplaceable": "You can't place a block here",
+
+  "villagertradefindermod.error.noworkstation": "No valid Workstation",
+  "villagertradefindermod.error.novillager": "No Villager nearby",
+
+  "villagertradefindermod.title.success": "Found Trade"
+}

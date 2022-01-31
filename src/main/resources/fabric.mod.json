@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "villagertradefindermod",
+  "version": "${version}",
+
+  "name": "Villager Trade Finder Mod",
+  "description": "This mod allows you to find perfect villager trades",
+  "authors": [
+    "Hasenzahn1"
+  ],
+  "contact": {
+  },
+
+  "license": "CC0-1.0",
+  "icon": "assets/villagertradefindermod/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "me.hasenzahn1.villagertradefindermod.VillagerTradeFinderMod"
+    ],
+    "client": [
+        "me.hasenzahn1.villagertradefindermod.VillagerTradeFinderMod"
+    ]
+  },
+  "mixins": [
+    "villagertradefindermod.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.12.12",
+    "fabric": "*",
+    "minecraft": "1.18.x",
+    "java": ">=17"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
