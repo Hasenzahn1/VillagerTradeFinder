@@ -21,6 +21,7 @@ public class Config {
     public Item itemToSearch;
     public Enchantment enchantment;
     public boolean assumeAutoTool;
+    public boolean ignoreLevel;
 
     private Set<Item> items;
     private HashMap<VillagerProfession, TreeSet<Item>> itemToWorkstationMap;
@@ -29,6 +30,7 @@ public class Config {
 
         perfectTrade = false;
         assumeAutoTool = false;
+        ignoreLevel = false;
         enchantment = Enchantments.MENDING;
 
         //Load add TradeableItems

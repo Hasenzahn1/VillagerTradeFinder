@@ -26,6 +26,7 @@ public class ClothConfig {
         Config c = VillagerTradeFinderMod.getInstance().getConfig();
         scrolling.addEntry(configEntryBuilder.startBooleanToggle(new TranslatableText("villagertradefindermod.config.perfecttrade"), c.perfectTrade).setDefaultValue(false).setSaveConsumer(b -> c.perfectTrade = b).build());
         scrolling.addEntry(configEntryBuilder.startBooleanToggle(new TranslatableText("villagertradefindermod.config.assumeautotool"), c.assumeAutoTool).setDefaultValue(false).setSaveConsumer(b -> c.assumeAutoTool = b).build());
+        scrolling.addEntry(configEntryBuilder.startBooleanToggle(new TranslatableText("villagertradefindermod.config.ignorelevel"), c.ignoreLevel).setDefaultValue(false).setSaveConsumer(b -> c.ignoreLevel = b).build());
 
         scrolling.addEntry(configEntryBuilder.startDropdownMenu(new TranslatableText("villagertradefindermod.config.itemtosearch"),
                         DropdownMenuBuilder.TopCellElementBuilder.ofItemObject(c.itemToSearch),
