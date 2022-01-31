@@ -35,7 +35,7 @@ public class Config {
         Random random = new Random();
         itemToWorkstationMap = new HashMap<>();
         HashSet<Item> hereitems = new HashSet<>();
-        VillagerTradeFinderMod.LOGGER.info(Registry.VILLAGER_PROFESSION.stream().map(VillagerProfession::getGatherableItems).collect(Collectors.toList()) + "");
+        //VillagerTradeFinderMod.LOGGER.info(Registry.VILLAGER_PROFESSION.stream().map(VillagerProfession::getGatherableItems).collect(Collectors.toList()) + "");
         for(Map.Entry<VillagerProfession, Int2ObjectMap<TradeOffers.Factory[]>> f : TradeOffers.PROFESSION_TO_LEVELED_TRADE.entrySet()){
             HashSet<Item> current = new HashSet<>();
             for(TradeOffers.Factory factory : f.getValue().get(1)) { // get tradeoffers of first trade
@@ -56,7 +56,7 @@ public class Config {
         itemToSearch = Items.ENCHANTED_BOOK;
         items = new TreeSet<>(Comparator.comparing(item -> item.getName().getString()));
         items.addAll(hereitems);
-        VillagerTradeFinderMod.LOGGER.info(items + "");
+        //VillagerTradeFinderMod.LOGGER.info(items + "");
 
     }
 

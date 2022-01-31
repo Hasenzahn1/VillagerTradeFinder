@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class ClothConfig {
 
     public static Screen openConfigScreen(Screen parent){
-        VillagerTradeFinderMod.LOGGER.info("Open GUI");
+        //VillagerTradeFinderMod.LOGGER.info("Open GUI");
         ConfigBuilder builder = ConfigBuilder.create().setTitle(new TranslatableText("villagertradefindermod.config.title"));
         ConfigCategory scrolling = builder.getOrCreateCategory(new TranslatableText("villagertradefindermod.config.category"));
         ConfigEntryBuilder configEntryBuilder = ConfigEntryBuilder.create();

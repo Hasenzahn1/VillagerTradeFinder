@@ -126,7 +126,7 @@ public class WorldManager {
 
                 int bestTool = getBestTool();
                 int selectedSlot = player.getInventory().selectedSlot + 36;
-                player.sendMessage(new LiteralText(bestTool + ": "), false);
+                //player.sendMessage(new LiteralText(bestTool + ": "), false);
                 InventoryScreen inv = new InventoryScreen(player);
 
 
@@ -185,7 +185,7 @@ public class WorldManager {
                 if(s instanceof MerchantScreen){
                     MerchantScreen screen = (MerchantScreen) s;
                     for(TradeOffer offer : screen.getScreenHandler().getRecipes()){
-                        player.sendMessage(new LiteralText(offer.getOriginalFirstBuyItem().getItem() + " + " + offer.getSecondBuyItem().getItem() + " = " + offer.getSellItem().getItem()), false);
+                        //player.sendMessage(new LiteralText(offer.getOriginalFirstBuyItem().getItem() + " + " + offer.getSecondBuyItem().getItem() + " = " + offer.getSellItem().getItem()), false);
 
                         if(offer.getSellItem().getItem() == config.itemToSearch){
                             //Found Item
@@ -193,13 +193,14 @@ public class WorldManager {
                                 NbtCompound enchantNBT = ((NbtCompound)((NbtList) offer.getSellItem().getNbt().get("StoredEnchantments")).get(0));
                                 String id = enchantNBT.get("id").asString();
                                 int lvl = Integer.parseInt(enchantNBT.get("lvl").asString().replace("s", ""));
-                                player.sendMessage(new LiteralText("Enchanted Book: " + id + "; " + lvl), false);
+                                //player.sendMessage(new LiteralText("Enchanted Book: " + id + "; " + lvl), false);
                                 if(Objects.equals(Registry.ENCHANTMENT.getKey(config.enchantment).get().getValue().toString(), id) && config.enchantment.getMaxLevel() == lvl) {
                                     if (config.perfectTrade) {
                                         if (offer.getOriginalFirstBuyItem().getCount() == minCost) {
                                             minecraftClient.inGameHud.setTitle(new TranslatableText("villagertradefindermod.title.success"));
                                             minecraftClient.inGameHud.setTitleTicks(2, 20 * 2, 2);
                                             player.playSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.MASTER, 1, 0);
+                                            player.closeHandledScreen();
                                             return false;
                                         }
                                         if(!config.assumeAutoTool) currentTask = Task.SWITCH_TO_TOOL;
@@ -210,6 +211,7 @@ public class WorldManager {
                                         minecraftClient.inGameHud.setTitle(new TranslatableText("villagertradefindermod.title.success"));
                                         minecraftClient.inGameHud.setTitleTicks(2, 20 * 2, 2);
                                         player.playSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.MASTER, 1, 0);
+                                        player.closeHandledScreen();
                                         return false;
                                     }
                                 }else{
@@ -222,6 +224,7 @@ public class WorldManager {
                             minecraftClient.inGameHud.setTitle(new TranslatableText("villagertradefindermod.title.success"));
                             minecraftClient.inGameHud.setTitleTicks(2, 20 * 2, 2);
                             player.playSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.MASTER, 1, 0);
+                            player.closeHandledScreen();
                             return false;
 
                         }
