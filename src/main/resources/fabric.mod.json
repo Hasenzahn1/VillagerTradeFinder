@@ -23,9 +23,6 @@
         "me.hasenzahn1.villagertradefindermod.VillagerTradeFinderMod"
     ]
   },
-  "mixins": [
-    "villagertradefindermod.mixins.json"
-  ],
 
   "depends": {
     "fabricloader": ">=0.12.12",
