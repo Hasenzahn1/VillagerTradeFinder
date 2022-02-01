@@ -7,6 +7,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.gui.screen.ingame.MerchantScreen;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.VillagerEntity;
@@ -182,6 +183,8 @@ public class WorldManager {
                 Screen s = minecraftClient.currentScreen;
                 if(s instanceof MerchantScreen){
                     MerchantScreen screen = (MerchantScreen) s;
+
+                    //DEBUG MESSAGES
                     StringBuilder sb = new StringBuilder();
                     for(TradeOffer offer : screen.getScreenHandler().getRecipes()){
                         //player.sendMessage(new LiteralText(offer.getSellItem().getItem().getName().getString() + ""), false);
@@ -197,6 +200,7 @@ public class WorldManager {
                     }
                     if(config.enableDebug) player.sendMessage(new LiteralText(sb.toString()), true);
 
+                    //TRADE CHECK
                     for(TradeOffer offer : screen.getScreenHandler().getRecipes()){
                         //player.sendMessage(new LiteralText(offer.getOriginalFirstBuyItem().getItem() + " + " + offer.getSecondBuyItem().getItem() + " = " + offer.getSellItem().getItem()), false);
                         if(offer.getSellItem().getItem() == config.itemToSearch){
@@ -205,8 +209,17 @@ public class WorldManager {
                                 NbtCompound enchantNBT = ((NbtCompound)((NbtList) offer.getSellItem().getNbt().get("StoredEnchantments")).get(0));
                                 String id = enchantNBT.get("id").asString();
                                 int lvl = Integer.parseInt(enchantNBT.get("lvl").asString().replace("s", ""));
+
+                                Enchantment found = Registry.ENCHANTMENT.get(new Identifier(id));
+                                if(config.stopAtMaxLevelTrade){
+                                    if(lvl == found.getMaxLevel()){
+                                        onFinish();
+                                        return false;
+                                    }
+                                }
+
                                 //player.sendMessage(new LiteralText("Enchanted Book: " + id + "; " + lvl), false);
-                                if(Objects.equals(Registry.ENCHANTMENT.getKey(config.enchantment).get().getValue().toString(), id) && (config.ignoreLevel || config.enchantment.getMaxLevel() == lvl)) {
+                                if(Objects.equals(found.toString(), id) && (config.ignoreLevel || config.enchantment.getMaxLevel() == lvl)) {
                                     if (config.perfectTrade) {
                                         if (offer.getOriginalFirstBuyItem().getCount() == minCost) {
                                             onFinish();

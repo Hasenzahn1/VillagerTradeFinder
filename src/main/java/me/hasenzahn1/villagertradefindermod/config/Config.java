@@ -23,6 +23,7 @@ public class Config {
     public boolean assumeAutoTool;
     public boolean ignoreLevel;
     public boolean enableDebug;
+    public boolean stopAtMaxLevelTrade;
 
     private Set<Item> items;
     private HashMap<VillagerProfession, TreeSet<Item>> itemToWorkstationMap;
@@ -33,6 +34,7 @@ public class Config {
         assumeAutoTool = false;
         ignoreLevel = false;
         enableDebug = false;
+        stopAtMaxLevelTrade = false;
         enchantment = Enchantments.MENDING;
 
         //Load add TradeableItems

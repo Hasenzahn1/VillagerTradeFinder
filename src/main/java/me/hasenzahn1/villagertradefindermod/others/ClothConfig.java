@@ -28,6 +28,7 @@ public class ClothConfig {
         scrolling.addEntry(configEntryBuilder.startBooleanToggle(new TranslatableText("villagertradefindermod.config.assumeautotool"), c.assumeAutoTool).setDefaultValue(false).setSaveConsumer(b -> c.assumeAutoTool = b).build());
         scrolling.addEntry(configEntryBuilder.startBooleanToggle(new TranslatableText("villagertradefindermod.config.ignorelevel"), c.ignoreLevel).setDefaultValue(false).setSaveConsumer(b -> c.ignoreLevel = b).build());
         scrolling.addEntry(configEntryBuilder.startBooleanToggle(new TranslatableText("villagertradefindermod.config.enabledebug"), c.enableDebug).setDefaultValue(false).setSaveConsumer(b -> c.enableDebug = b).build());
+        scrolling.addEntry(configEntryBuilder.startBooleanToggle(new TranslatableText("villagertradefindermod.config.stopatmaxlevel"), c.stopAtMaxLevelTrade).setDefaultValue(false).setSaveConsumer(b -> c.stopAtMaxLevelTrade = b).build());
 
 
         scrolling.addEntry(configEntryBuilder.startDropdownMenu(new TranslatableText("villagertradefindermod.config.itemtosearch"),
