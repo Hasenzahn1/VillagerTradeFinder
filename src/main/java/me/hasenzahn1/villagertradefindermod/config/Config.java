@@ -1,19 +1,15 @@
 package me.hasenzahn1.villagertradefindermod.config;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import me.hasenzahn1.villagertradefindermod.VillagerTradeFinderMod;
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.village.VillagerProfession;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Config {
 
@@ -24,6 +20,7 @@ public class Config {
     public boolean ignoreLevel;
     public boolean enableDebug;
     public boolean stopAtMaxLevelTrade;
+    public boolean stopAtPerfectTrade;
 
     private Set<Item> items;
     private HashMap<VillagerProfession, TreeSet<Item>> itemToWorkstationMap;
@@ -35,6 +32,7 @@ public class Config {
         ignoreLevel = false;
         enableDebug = false;
         stopAtMaxLevelTrade = false;
+        stopAtPerfectTrade = false;
         enchantment = Enchantments.MENDING;
 
         //Load add TradeableItems

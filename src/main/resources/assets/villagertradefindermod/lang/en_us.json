@@ -13,6 +13,7 @@
   "villagertradefindermod.config.enabledebug": "Enable Debug",
   "villagertradefindermod.config.enchantmenttosearch": "Enchantment to search",
   "villagertradefindermod.config.stopatmaxlevel": "Stop At Max Level",
+  "villagertradefindermod.config.stopatperfecttrade": "Stop At Max Level",
 
   "villagertradefindermod.action.noground": "You are not looking at the ground",
   "villagertradefindermod.action.notplaceable": "You can't place a block here",

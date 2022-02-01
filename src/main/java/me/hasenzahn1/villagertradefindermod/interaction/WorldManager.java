@@ -8,7 +8,6 @@ import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.gui.screen.ingame.MerchantScreen;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -58,11 +57,9 @@ public class WorldManager {
     private final MinecraftClient minecraftClient;
     private Task currentTask;
     private VillagerProfession villProf;
-    private Item workStation;
     private BlockPos blockPos;
     private final ArrayList<PointOfInterestType> validWorkStationPOIs;
     private final Config config;
-    private int minCost;
     private VillagerEntity nearestVillager;
 
     public WorldManager(Config config){
@@ -197,6 +194,7 @@ public class WorldManager {
                             //player.sendMessage(new LiteralText(Registry.ENCHANTMENT.get(new Identifier(id)).getName(lvl).getString() + ""), false);
                         }
                         else sb.append(offer.getSellItem().getItem().getName().getString());
+                        sb.append(" (" + offer.getOriginalFirstBuyItem().getCount() + ")");
                     }
                     if(config.enableDebug) player.sendMessage(new LiteralText(sb.toString()), true);
 
@@ -218,10 +216,17 @@ public class WorldManager {
                                     }
                                 }
 
+                                if(config.stopAtPerfectTrade){
+                                    if(lvl == found.getMaxLevel() && getMinCost(found) == offer.getOriginalFirstBuyItem().getCount()){
+                                        onFinish();
+                                        return false;
+                                    }
+                                }
+
                                 //player.sendMessage(new LiteralText("Enchanted Book: " + id + "; " + lvl), false);
                                 if(Objects.equals(found.toString(), id) && (config.ignoreLevel || config.enchantment.getMaxLevel() == lvl)) {
                                     if (config.perfectTrade) {
-                                        if (offer.getOriginalFirstBuyItem().getCount() == minCost) {
+                                        if (offer.getOriginalFirstBuyItem().getCount() == getMinCost(config.enchantment)) {
                                             onFinish();
                                             return false;
                                         }
@@ -250,6 +255,12 @@ public class WorldManager {
         }
 
         return true;
+    }
+
+    private int getMinCost(Enchantment e){
+        int mincost = e.getMaxLevel() * 3 + 2;
+        if(e.isTreasure()) mincost *= 2;
+        return mincost;
     }
 
     private void onFail(){
@@ -331,12 +342,6 @@ public class WorldManager {
             }
         }
 
-        //GetEnchantment Cost
-        if(config.itemToSearch == Items.ENCHANTED_BOOK){
-            minCost = 2 + config.enchantment.getMaxLevel() * 3;
-            if(config.enchantment.isTreasure()) minCost *= 2;
-        }
-
         BlockHitResult h = (BlockHitResult) player.raycast(5, 0, false);
         if(h.getType() == HitResult.Type.BLOCK){
             BlockState state = minecraftClient.world.getBlockState(h.getBlockPos());
@@ -376,8 +381,6 @@ public class WorldManager {
             Block block = Block.getBlockFromItem(stack.getItem());
             BlockState state = block.getDefaultState();
             if(villProf.getWorkStation().contains(state)){
-               // player.sendMessage(new LiteralText(block + ""), false);
-                workStation = stack.getItem();
                 return i;
             }
         }
