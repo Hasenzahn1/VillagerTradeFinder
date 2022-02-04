@@ -1,36 +1,31 @@
 package me.hasenzahn1.villagertradefindermod.interaction;
 
 import me.hasenzahn1.villagertradefindermod.config.Config;
-import net.minecraft.block.*;
+import me.hasenzahn1.villagertradefindermod.world.BlockInteractionHelper;
+import me.hasenzahn1.villagertradefindermod.world.PlayerHelper;
+import me.hasenzahn1.villagertradefindermod.world.WorldHelper;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.gui.screen.ingame.MerchantScreen;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
-import net.minecraft.network.packet.c2s.play.HandSwingC2SPacket;
-import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.VillagerProfession;
@@ -76,6 +71,7 @@ public class WorldManager {
                 player = minecraftClient.player;
                 assert player != null;
 
+                villProf = getVillProf();
                 boolean result = scanWorkstation();
                 if(blockPos == null){
                     return false;
@@ -90,41 +86,19 @@ public class WorldManager {
             }
 
             case PLACING -> {
-                //player.sendMessage(new LiteralText("PLACING"), false);
-                //boolean success = interactWithBlock();
-
-                Vec3d hitpos = new Vec3d(blockPos.getX() + 0.5, blockPos.getY() + 0.5, blockPos.getZ() + 0.5);
-                BlockPos neighbor;
-                Direction side = getPlaceSide(blockPos);
-
-                if(side == null){
-                    side = Direction.UP;
-                    neighbor = blockPos;
-                }else{
-                    neighbor = blockPos.offset(side.getOpposite());
-                    hitpos.add(side.getOffsetX() * 0.5, side.getOffsetY() * 0.5, side.getOffsetZ() * 0.5);
-                }
-                Direction s = side;
-
-                boolean success = place(new BlockHitResult(hitpos, s, neighbor, false), Hand.MAIN_HAND, true);
-
+                boolean success = BlockInteractionHelper.place(blockPos);
                 if(success) currentTask = Task.CHECK_VILLAGER;
             }
             case BREAKING -> {
-                //player.sendMessage(new LiteralText("BREAKING"), false);
-                if(!breakBlock()){
-                    currentTask = Task.SWITCH_TO_WORKSTATION;
-                }
+                if(!BlockInteractionHelper.breakBlock(blockPos)) currentTask = Task.SWITCH_TO_WORKSTATION;
+
             }
             case SWITCH_TO_TOOL -> {
-                //player.sendMessage(new LiteralText("SWITCH_TO_TOOL"), false);
                 assert minecraftClient.interactionManager != null;
 
-                int bestTool = getBestTool();
+                int bestTool = PlayerHelper.getBestTool(blockPos);
                 int selectedSlot = player.getInventory().selectedSlot + 36;
-                //player.sendMessage(new LiteralText(bestTool + ": "), false);
                 InventoryScreen inv = new InventoryScreen(player);
-
 
                 if(bestTool != -1) { //No Best Tool
                     if(bestTool >= 36){
@@ -132,7 +106,6 @@ public class WorldManager {
                             player.getInventory().selectedSlot = bestTool - 36;
 
                     }else {
-                        //player.getInventory().swapSlotWithHotbar(bestTool);
                         minecraftClient.interactionManager.clickSlot(inv.getScreenHandler().syncId, bestTool, 0, SlotActionType.PICKUP, player);
                         minecraftClient.interactionManager.clickSlot(inv.getScreenHandler().syncId, selectedSlot, 0, SlotActionType.PICKUP, player);
                         minecraftClient.interactionManager.clickSlot(inv.getScreenHandler().syncId, bestTool, 0, SlotActionType.PICKUP, player);
@@ -142,13 +115,11 @@ public class WorldManager {
                 currentTask = Task.BREAKING;
             }
             case SWITCH_TO_WORKSTATION -> {
-                //player.sendMessage(new LiteralText("SWITCH_TO_WORKSTATION"), false);
                 assert minecraftClient.interactionManager != null;
 
-                int slot = getWorkstationSlot();
+                int slot = PlayerHelper.getWorkstationSlot(villProf);
                 InventoryScreen inv = new InventoryScreen(player);
                 int selectedSlot = player.getInventory().selectedSlot + 36;
-                //player.sendMessage(new LiteralText(slot + ": " + selectedSlot), false);
 
                 if(slot != -1){
                     if(slot >= 36){
@@ -167,20 +138,16 @@ public class WorldManager {
             }
 
             case CHECK_VILLAGER -> {
-                //player.sendMessage(new LiteralText("CHECK_VILLAGER"), false);
-
-                VillagerEntity villagerEntity = getNearestVillager();
-                if(villagerEntity == null){
+                nearestVillager = WorldHelper.getNearestVillager(nearestVillager);
+                if(nearestVillager == null){
                     player.sendMessage(new TranslatableText("villagertradefindermod.error.novillager"), true);
                     return true;
                 }
 
-                interactWithVillager(villagerEntity);
+                BlockInteractionHelper.interactWithVillager(nearestVillager);
 
                 Screen s = minecraftClient.currentScreen;
-                if(s instanceof MerchantScreen){
-                    MerchantScreen screen = (MerchantScreen) s;
-
+                if(s instanceof MerchantScreen screen){
                     //DEBUG MESSAGES
                     StringBuilder sb = new StringBuilder();
                     for(TradeOffer offer : screen.getScreenHandler().getRecipes()){
@@ -194,7 +161,7 @@ public class WorldManager {
                             //player.sendMessage(new LiteralText(Registry.ENCHANTMENT.get(new Identifier(id)).getName(lvl).getString() + ""), false);
                         }
                         else sb.append(offer.getSellItem().getItem().getName().getString());
-                        sb.append(" (" + offer.getOriginalFirstBuyItem().getCount() + ")");
+                        sb.append(" (").append(offer.getOriginalFirstBuyItem().getCount()).append(")");
                     }
                     if(config.enableDebug) player.sendMessage(new LiteralText(sb.toString()), true);
 
@@ -277,89 +244,28 @@ public class WorldManager {
 
     }
 
-    private boolean place(BlockHitResult blockHitResult, Hand hand, boolean swing){
-        boolean wasSneaking = player.input.sneaking;
-        player.input.sneaking = false;
-
-        ActionResult result = minecraftClient.interactionManager.interactBlock(player, minecraftClient.world, hand, blockHitResult);
-
-        if(result.shouldSwingHand()){
-            if(swing) player.swingHand(hand);
-            else minecraftClient.getNetworkHandler().sendPacket(new HandSwingC2SPacket(hand));
-        }
-
-        player.input.sneaking = wasSneaking;
-        return result.isAccepted();
-    }
-
-    private void interactWithVillager(VillagerEntity entity){
-        assert minecraftClient.interactionManager != null;
-
-        ActionResult result = minecraftClient.interactionManager.interactEntity(player, entity, Hand.MAIN_HAND);
-        if(result.isAccepted()){
-            player.swingHand(Hand.MAIN_HAND);
-        }
-    }
-
-    private VillagerEntity getNearestVillager(){
-        assert minecraftClient.world != null;
-
-        //Test Closest Villager in Reach
-        VillagerEntity nearest = (nearestVillager != null && nearestVillager.getPos().distanceTo(player.getPos()) < 5) ? nearestVillager : null;
-        float distance = 100;
-        if(nearestVillager == null) {
-            for (Entity e : minecraftClient.world.getEntities()) {
-                if (e instanceof VillagerEntity) {
-                    VillagerEntity villagerEntity = (VillagerEntity) e;
-                    if (villagerEntity.getPos().distanceTo(player.getPos()) < 5 && villagerEntity.getPos().distanceTo(player.getPos()) < distance) {
-                        nearest = villagerEntity;
-                        distance = (float) villagerEntity.getPos().distanceTo(player.getPos());
-                    }
+    private VillagerProfession getVillProf(){
+        for(Map.Entry<VillagerProfession, TreeSet<Item>> profToItem : config.getItemToWorkstationMap().entrySet()){
+            for(Item i : profToItem.getValue()){
+                if(i.equals(config.itemToSearch)){
+                    return profToItem.getKey();
                 }
             }
-            nearestVillager = nearest;
         }
-        return nearest;
-    }
-
-    private boolean breakBlock(){
-        assert minecraftClient.interactionManager != null;
-        boolean value = minecraftClient.interactionManager.updateBlockBreakingProgress(blockPos, Direction.DOWN);
-        player.swingHand(Hand.MAIN_HAND);
-        return value;
+        return null;
     }
 
     private boolean scanWorkstation(){
         assert minecraftClient.world != null;
 
-        //Get Villager Profession
-        for(Map.Entry<VillagerProfession, TreeSet<Item>> profToItem : config.getItemToWorkstationMap().entrySet()){
-            for(Item i : profToItem.getValue()){
-                if(i.equals(config.itemToSearch)){
-                    villProf = profToItem.getKey();
-                    break;
-                }
-            }
-        }
-
         BlockHitResult h = (BlockHitResult) player.raycast(5, 0, false);
         if(h.getType() == HitResult.Type.BLOCK){
             BlockState state = minecraftClient.world.getBlockState(h.getBlockPos());
             blockPos = h.getBlockPos();
-            //player.sendMessage(new LiteralText(blockPos + ""), false);
-            if(!isValidWorkstation(state)) blockPos = blockPos.add(h.getSide().getOffsetX(), h.getSide().getOffsetY(), h.getSide().getOffsetZ());
-            //player.sendMessage(new LiteralText(state.getBlock() + " | " + minecraftClient.world.getBlockState(blockPos).getBlock() + " | " + h.getSide().getOffsetX() +
-            //        " | " + h.getSide().getOffsetY() + " | " + h.getSide().getOffsetZ() + " | " + blockPos), false);
-            return isValidWorkstation(state);
+            if(!WorldHelper.isValidWorkstation(state)) blockPos = blockPos.add(h.getSide().getOffsetX(), h.getSide().getOffsetY(), h.getSide().getOffsetZ());
+            return WorldHelper.isValidWorkstation(state);
         }else{
             player.sendMessage(new TranslatableText("villagertradefindermod.action.noground"), false);
-        }
-        return false;
-    }
-
-    private boolean isValidWorkstation(BlockState blockState){
-        for(PointOfInterestType p : validWorkStationPOIs){
-            if (p.contains(blockState)) return true;
         }
         return false;
     }
@@ -369,77 +275,4 @@ public class WorldManager {
         blockPos = null;
         nearestVillager = null;
     }
-
-    private int getWorkstationSlot(){
-        assert player != null;
-        assert villProf != null;
-
-        PlayerScreenHandler playerScreenHandler = new InventoryScreen(player).getScreenHandler();
-
-        for(int i = 0; i < playerScreenHandler.slots.size(); i++){
-            ItemStack stack = playerScreenHandler.getSlot(i).getStack();
-            Block block = Block.getBlockFromItem(stack.getItem());
-            BlockState state = block.getDefaultState();
-            if(villProf.getWorkStation().contains(state)){
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    private int getBestTool(){
-        assert minecraftClient.world != null;
-        assert minecraftClient.player != null;
-        assert blockPos != null;
-
-        PlayerScreenHandler playerScreenHandler = new InventoryScreen(minecraftClient.player).getScreenHandler();
-        BlockState state = minecraftClient.world.getBlockState(blockPos);
-
-        int airIndex = -1, bestToolIndex = -1;
-        float bestMiningSpeed = 1;
-
-        for(int i = 0; i < playerScreenHandler.slots.size(); i++){
-            ItemStack stack = playerScreenHandler.getSlot(i).getStack();
-            if(stack.getMiningSpeedMultiplier(state) > bestMiningSpeed) {
-                bestMiningSpeed = stack.getMiningSpeedMultiplier(state);
-                bestToolIndex = i;
-            }else if(stack.equals(ItemStack.EMPTY)){
-                airIndex = i;
-            }
-        }
-        return bestToolIndex > 1 ? bestToolIndex : airIndex;
-    }
-
-    public Direction getPlaceSide(BlockPos blockPos) {
-        for (Direction side : Direction.values()) {
-            BlockPos neighbor = blockPos.offset(side);
-            Direction side2 = side.getOpposite();
-
-            BlockState state = minecraftClient.world.getBlockState(neighbor);
-
-            // Check if neighbour isn't empty
-            if (state.isAir() || isClickable(state.getBlock())) continue;
-
-            // Check if neighbour is a fluid
-            if (!state.getFluidState().isEmpty()) continue;
-
-            return side2;
-        }
-
-        return null;
-    }
-
-    public static boolean isClickable(Block block) {
-        return block instanceof CraftingTableBlock
-                || block instanceof AnvilBlock
-                || block instanceof AbstractButtonBlock
-                || block instanceof AbstractPressurePlateBlock
-                || block instanceof BlockWithEntity
-                || block instanceof BedBlock
-                || block instanceof FenceGateBlock
-                || block instanceof DoorBlock
-                || block instanceof NoteBlock
-                || block instanceof TrapdoorBlock;
-    }
-
 }
