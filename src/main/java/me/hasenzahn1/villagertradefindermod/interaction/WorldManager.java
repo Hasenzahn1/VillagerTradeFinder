@@ -126,7 +126,6 @@ public class WorldManager {
                         if(PlayerInventory.isValidHotbarIndex(slot - 36))
                             player.getInventory().selectedSlot = slot - 36;
                     }else {
-
                         minecraftClient.interactionManager.clickSlot(inv.getScreenHandler().syncId, slot, 0, SlotActionType.PICKUP, player);
                         minecraftClient.interactionManager.clickSlot(inv.getScreenHandler().syncId, selectedSlot, 0, SlotActionType.PICKUP, player);
                         minecraftClient.interactionManager.clickSlot(inv.getScreenHandler().syncId, slot, 0, SlotActionType.PICKUP, player);
@@ -191,7 +190,8 @@ public class WorldManager {
                                 }
 
                                 //player.sendMessage(new LiteralText("Enchanted Book: " + id + "; " + lvl), false);
-                                if(Objects.equals(found.toString(), id) && (config.ignoreLevel || config.enchantment.getMaxLevel() == lvl)) {
+                                //player.sendMessage(new LiteralText(Registry.ENCHANTMENT.getId(found) + " | " + Registry.ENCHANTMENT.getId(config.enchantment)), false);
+                                if(Registry.ENCHANTMENT.getId(found).equals(Registry.ENCHANTMENT.getId(config.enchantment)) && (!config.perfectTrade || config.enchantment.getMaxLevel() == lvl)) {
                                     if (config.perfectTrade) {
                                         if (offer.getOriginalFirstBuyItem().getCount() == getMinCost(config.enchantment)) {
                                             onFinish();

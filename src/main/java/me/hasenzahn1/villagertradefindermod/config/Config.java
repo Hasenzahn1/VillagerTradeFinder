@@ -17,7 +17,6 @@ public class Config {
     public Item itemToSearch;
     public Enchantment enchantment;
     public boolean assumeAutoTool;
-    public boolean ignoreLevel;
     public boolean enableDebug;
     public boolean stopAtMaxLevelTrade;
     public boolean stopAtPerfectTrade;
@@ -29,7 +28,6 @@ public class Config {
 
         perfectTrade = false;
         assumeAutoTool = false;
-        ignoreLevel = false;
         enableDebug = false;
         stopAtMaxLevelTrade = false;
         stopAtPerfectTrade = false;

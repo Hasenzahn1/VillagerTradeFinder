@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 public class ClothConfig {
 
     public static Screen openConfigScreen(Screen parent){
+
         //VillagerTradeFinderMod.LOGGER.info("Open GUI");
         ConfigBuilder builder = ConfigBuilder.create().setTitle(new TranslatableText("villagertradefindermod.config.title"));
         ConfigCategory scrolling = builder.getOrCreateCategory(new TranslatableText("villagertradefindermod.config.category"));
@@ -26,7 +27,6 @@ public class ClothConfig {
         Config c = VillagerTradeFinderMod.getInstance().getConfig();
         scrolling.addEntry(configEntryBuilder.startBooleanToggle(new TranslatableText("villagertradefindermod.config.perfecttrade"), c.perfectTrade).setDefaultValue(false).setSaveConsumer(b -> c.perfectTrade = b).build());
         scrolling.addEntry(configEntryBuilder.startBooleanToggle(new TranslatableText("villagertradefindermod.config.assumeautotool"), c.assumeAutoTool).setDefaultValue(false).setSaveConsumer(b -> c.assumeAutoTool = b).build());
-        scrolling.addEntry(configEntryBuilder.startBooleanToggle(new TranslatableText("villagertradefindermod.config.ignorelevel"), c.ignoreLevel).setDefaultValue(false).setSaveConsumer(b -> c.ignoreLevel = b).build());
         scrolling.addEntry(configEntryBuilder.startBooleanToggle(new TranslatableText("villagertradefindermod.config.enabledebug"), c.enableDebug).setDefaultValue(false).setSaveConsumer(b -> c.enableDebug = b).build());
         scrolling.addEntry(configEntryBuilder.startBooleanToggle(new TranslatableText("villagertradefindermod.config.stopatmaxlevel"), c.stopAtMaxLevelTrade).setDefaultValue(false).setSaveConsumer(b -> c.stopAtMaxLevelTrade = b).build());
         scrolling.addEntry(configEntryBuilder.startBooleanToggle(new TranslatableText("villagertradefindermod.config.stopatperfecttrade"), c.stopAtPerfectTrade).setDefaultValue(false).setSaveConsumer(b -> c.stopAtPerfectTrade = b).build());
