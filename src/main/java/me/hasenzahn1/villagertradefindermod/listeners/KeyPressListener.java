@@ -41,6 +41,7 @@ public class KeyPressListener {
 
     public void onProcessKey(){
         if(menu.wasPressed()){
+            //System.out.println(Registry.VILLAGER_PROFESSION.stream().map(VillagerProfession::id).map(WorldHelper::getPOIOfId).map(Registry.POINT_OF_INTEREST_TYPE::get).collect(Collectors.toList()));
             MinecraftClient.getInstance().setScreen(ClothConfig.openConfigScreen(MinecraftClient.getInstance().currentScreen));
         }else if(start.wasPressed()){
             finderRunning = !finderRunning;

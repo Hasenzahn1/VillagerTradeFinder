@@ -5,11 +5,13 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.village.VillagerProfession;
 
 import java.util.*;
+
 
 public class Config {
 
@@ -34,7 +36,7 @@ public class Config {
         enchantment = Enchantments.MENDING;
 
         //Load add TradeableItems
-        Random random = new Random();
+        Random random = net.minecraft.util.math.random.Random.create();
         itemToWorkstationMap = new HashMap<>();
         HashSet<Item> hereitems = new HashSet<>();
         //VillagerTradeFinderMod.LOGGER.info(Registry.VILLAGER_PROFESSION.stream().map(VillagerProfession::getGatherableItems).collect(Collectors.toList()) + "");

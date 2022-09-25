@@ -20,8 +20,7 @@ import net.minecraft.nbt.NbtList;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
@@ -33,7 +32,6 @@ import net.minecraft.world.poi.PointOfInterestType;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Objects;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
@@ -53,16 +51,12 @@ public class WorldManager {
     private Task currentTask;
     private VillagerProfession villProf;
     private BlockPos blockPos;
-    private final ArrayList<PointOfInterestType> validWorkStationPOIs;
     private final Config config;
     private VillagerEntity nearestVillager;
 
     public WorldManager(Config config){
         minecraftClient = MinecraftClient.getInstance();
         this.config = config;
-
-        validWorkStationPOIs = new ArrayList<>();
-        validWorkStationPOIs.addAll(Registry.VILLAGER_PROFESSION.stream().map(VillagerProfession::getWorkStation).collect(Collectors.toList()));
     }
 
     public boolean tick(){
@@ -132,14 +126,14 @@ public class WorldManager {
                     }
                     currentTask = Task.PLACING;
                 }else{
-                    player.sendMessage(new TranslatableText("villagertradefindermod.error.noworkstation"), true);
+                    player.sendMessage(Text.translatable("villagertradefindermod.error.noworkstation"), true);
                 }
             }
 
             case CHECK_VILLAGER -> {
                 nearestVillager = WorldHelper.getNearestVillager(nearestVillager);
                 if(nearestVillager == null){
-                    player.sendMessage(new TranslatableText("villagertradefindermod.error.novillager"), true);
+                    player.sendMessage(Text.translatable("villagertradefindermod.error.novillager"), true);
                     return true;
                 }
 
@@ -162,7 +156,7 @@ public class WorldManager {
                         else sb.append(offer.getSellItem().getItem().getName().getString());
                         sb.append(" (").append(offer.getOriginalFirstBuyItem().getCount()).append(")");
                     }
-                    if(config.enableDebug) player.sendMessage(new LiteralText(sb.toString()), true);
+                    if(config.enableDebug) player.sendMessage(Text.translatable(sb.toString()), true);
 
                     //TRADE CHECK
                     for(TradeOffer offer : screen.getScreenHandler().getRecipes()){
@@ -225,9 +219,9 @@ public class WorldManager {
     }
 
     private int getMinCost(Enchantment e){
-        int mincost = e.getMaxLevel() * 3 + 2;
-        if(e.isTreasure()) mincost *= 2;
-        return mincost;
+        int minCost = e.getMaxLevel() * 3 + 2;
+        if(e.isTreasure()) minCost *= 2;
+        return minCost;
     }
 
     private void onFail(){
@@ -237,7 +231,7 @@ public class WorldManager {
     }
 
     private void onFinish(){
-        minecraftClient.inGameHud.setTitle(new TranslatableText("villagertradefindermod.title.success"));
+        minecraftClient.inGameHud.setTitle(Text.translatable("villagertradefindermod.title.success"));
         minecraftClient.inGameHud.setTitleTicks(2, 20 * 2, 2);
         player.playSound(SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, SoundCategory.MASTER, 1, 0);
         player.closeHandledScreen();
@@ -265,7 +259,7 @@ public class WorldManager {
             if(!WorldHelper.isValidWorkstation(state)) blockPos = blockPos.add(h.getSide().getOffsetX(), h.getSide().getOffsetY(), h.getSide().getOffsetZ());
             return WorldHelper.isValidWorkstation(state);
         }else{
-            player.sendMessage(new TranslatableText("villagertradefindermod.action.noground"), false);
+            player.sendMessage(Text.translatable("villagertradefindermod.action.noground"), false);
         }
         return false;
     }

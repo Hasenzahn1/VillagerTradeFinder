@@ -38,7 +38,7 @@ public class BlockInteractionHelper {
         boolean wasSneaking = player.input.sneaking;
         player.input.sneaking = false;
 
-        ActionResult result = MinecraftClient.getInstance().interactionManager.interactBlock(player, MinecraftClient.getInstance().world, Hand.MAIN_HAND, blockHitResult);
+        ActionResult result = MinecraftClient.getInstance().interactionManager.interactBlock(player, Hand.MAIN_HAND, blockHitResult);
 
         if(result.shouldSwingHand()){
             player.swingHand(Hand.MAIN_HAND);

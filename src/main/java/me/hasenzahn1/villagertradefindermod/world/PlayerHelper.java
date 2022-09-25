@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.village.VillagerProfession;
+import net.minecraft.world.World;
 
 public class PlayerHelper {
 
@@ -22,12 +23,20 @@ public class PlayerHelper {
             ItemStack stack = playerScreenHandler.getSlot(i).getStack();
             Block block = Block.getBlockFromItem(stack.getItem());
             BlockState state = block.getDefaultState();
+            if(WorldHelper.isVillagerWorkstation(villProf, state)){
+                return i;
+            }
+            /*
             if(villProf.getWorkStation().contains(state)){
                 return i;
             }
+
+             */
         }
         return -1;
     }
+
+
 
     public static int getBestTool(BlockPos blockPos){
         MinecraftClient minecraftClient = MinecraftClient.getInstance();
