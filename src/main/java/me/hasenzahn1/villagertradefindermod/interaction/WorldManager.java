@@ -21,6 +21,7 @@ import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
@@ -231,7 +232,7 @@ public class WorldManager {
     }
 
     private void onFinish(){
-        minecraftClient.inGameHud.setTitle(Text.translatable("villagertradefindermod.title.success"));
+        minecraftClient.inGameHud.setTitle(Text.translatable("villagertradefindermod.title.success").formatted(Formatting.GREEN));
         minecraftClient.inGameHud.setTitleTicks(2, 20 * 2, 2);
         player.playSound(SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, SoundCategory.MASTER, 1, 0);
         player.closeHandledScreen();
