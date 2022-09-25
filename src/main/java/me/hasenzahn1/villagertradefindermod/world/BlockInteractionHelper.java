@@ -13,6 +13,7 @@ import net.minecraft.util.math.Vec3d;
 
 public class BlockInteractionHelper {
 
+
     public static boolean place(BlockPos blockPos){
         Vec3d hitpos = new Vec3d(blockPos.getX() + 0.5, blockPos.getY() + 0.5, blockPos.getZ() + 0.5);
         BlockPos neighbor;
