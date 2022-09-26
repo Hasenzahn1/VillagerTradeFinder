@@ -186,6 +186,9 @@ public class WorldManager {
                                     if(lvl == found.getMaxLevel() && getMinCost(found) == offer.getOriginalFirstBuyItem().getCount()){
                                         onFinish();
                                         return false;
+                                    }else{
+                                        onFail();
+                                        return true;
                                     }
                                 }
 
