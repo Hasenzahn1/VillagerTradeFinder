@@ -28,8 +28,8 @@ public class ClothConfig {
         scrolling.addEntry(configEntryBuilder.startBooleanToggle(Text.translatable("villagertradefindermod.config.perfecttrade"), c.perfectTrade).setDefaultValue(false).setSaveConsumer(b -> c.perfectTrade = b).build());
         scrolling.addEntry(configEntryBuilder.startBooleanToggle(Text.translatable("villagertradefindermod.config.assumeautotool"), c.assumeAutoTool).setDefaultValue(false).setSaveConsumer(b -> c.assumeAutoTool = b).build());
         scrolling.addEntry(configEntryBuilder.startBooleanToggle(Text.translatable("villagertradefindermod.config.enabledebug"), c.enableDebug).setDefaultValue(false).setSaveConsumer(b -> c.enableDebug = b).build());
-        scrolling.addEntry(configEntryBuilder.startBooleanToggle(Text.translatable("villagertradefindermod.config.stopatmaxlevel"), c.stopAtMaxLevelTrade).setDefaultValue(false).setSaveConsumer(b -> c.stopAtMaxLevelTrade = b).build());
-        scrolling.addEntry(configEntryBuilder.startBooleanToggle(Text.translatable("villagertradefindermod.config.stopatperfecttrade"), c.stopAtPerfectTrade).setDefaultValue(false).setSaveConsumer(b -> c.stopAtPerfectTrade = b).build());
+        scrolling.addEntry(configEntryBuilder.startBooleanToggle(Text.translatable("villagertradefindermod.config.stopatmaxlevel"), c.stopAtAnyMaxLevelTrade).setDefaultValue(false).setSaveConsumer(b -> c.stopAtAnyMaxLevelTrade = b).build());
+        scrolling.addEntry(configEntryBuilder.startBooleanToggle(Text.translatable("villagertradefindermod.config.stopatperfecttrade"), c.stopAtAnyPerfectTrade).setDefaultValue(false).setSaveConsumer(b -> c.stopAtAnyPerfectTrade = b).build());
 
 
         scrolling.addEntry(configEntryBuilder.startDropdownMenu(Text.translatable("villagertradefindermod.config.itemtosearch"),

@@ -29,12 +29,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.VillagerProfession;
-import net.minecraft.world.poi.PointOfInterestType;
 
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
 
 public class WorldManager {
 
@@ -170,17 +167,20 @@ public class WorldManager {
                                 int lvl = Integer.parseInt(enchantNBT.get("lvl").asString().replace("s", ""));
 
                                 Enchantment found = Registry.ENCHANTMENT.get(new Identifier(id));
-                                if(config.stopAtMaxLevelTrade){
+                                if(config.stopAtAnyMaxLevelTrade){
                                     if(lvl == found.getMaxLevel()){
                                         onFinish();
                                         return false;
                                     }
                                 }
 
-                                if(config.stopAtPerfectTrade){
+                                if(config.stopAtAnyPerfectTrade){
                                     if(lvl == found.getMaxLevel() && getMinCost(found) == offer.getOriginalFirstBuyItem().getCount()){
                                         onFinish();
                                         return false;
+                                    }else{
+                                        onFail();
+                                        return true;
                                     }
                                 }
 
