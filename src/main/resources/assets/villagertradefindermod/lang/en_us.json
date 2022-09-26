@@ -6,14 +6,14 @@
 
   "villagertradefindermod.config.title": "Villager Trade Finder Config",
   "villagertradefindermod.config.category": "What is this??",
-  "villagertradefindermod.config.perfecttrade": "Search for Perfect Trade",
-  "villagertradefindermod.config.assumeautotool": "Assume Auto Tool",
+  "villagertradefindermod.config.perfecttrade": "Search for perfect trade",
+  "villagertradefindermod.config.assumeautotool": "Assume auto tool",
   "villagertradefindermod.config.ignorelevel": "Ignore enchantment level",
   "villagertradefindermod.config.itemtosearch": "Item to search",
   "villagertradefindermod.config.enabledebug": "Enable Debug",
   "villagertradefindermod.config.enchantmenttosearch": "Enchantment to search",
-  "villagertradefindermod.config.stopatmaxlevel": "Stop At Max Level",
-  "villagertradefindermod.config.stopatperfecttrade": "Stop At Perfect Trade",
+  "villagertradefindermod.config.stopatmaxlevel": "Stop at any max level trade",
+  "villagertradefindermod.config.stopatperfecttrade": "Stop at any perfect trade",
 
   "villagertradefindermod.action.noground": "You are not looking at the ground",
   "villagertradefindermod.action.notplaceable": "You can't place a block here",
