@@ -10,9 +10,9 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.Items;
+import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.util.stream.Collectors;
 
@@ -42,15 +42,15 @@ public class ClothConfig {
                 .build());
 
         scrolling.addEntry(configEntryBuilder.startStringDropdownMenu(Text.translatable("villagertradefindermod.config.enchantmenttosearch"), toObjectFunction(c.enchantment))
-                .setSelections(Registry.ENCHANTMENT.stream().filter(Enchantment::isAvailableForEnchantedBookOffer).map(ClothConfig::toObjectFunction).collect(Collectors.toList()))
+                .setSelections(Registries.ENCHANTMENT.stream().filter(Enchantment::isAvailableForEnchantedBookOffer).map(ClothConfig::toObjectFunction).collect(Collectors.toList()))
                 .setDefaultValue(toObjectFunction(Enchantments.MENDING))
-                .setSaveConsumer(ench -> c.enchantment = Registry.ENCHANTMENT.get(new Identifier(ench)))
+                .setSaveConsumer(ench -> c.enchantment = Registries.ENCHANTMENT.get(new Identifier(ench)))
                 .build());
 
         return builder.setParentScreen(parent).build();
     }
 
     public static String toObjectFunction(Enchantment e){
-        return Registry.ENCHANTMENT.getKey(e).get().getValue().toString();
+        return Registries.ENCHANTMENT.getKey(e).get().getValue().toString();
     }
 }

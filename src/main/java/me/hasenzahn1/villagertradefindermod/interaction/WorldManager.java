@@ -17,6 +17,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.registry.Registries;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -26,7 +27,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.VillagerProfession;
 
@@ -148,7 +148,7 @@ public class WorldManager {
                             NbtCompound enchantNBT = ((NbtCompound)((NbtList) offer.getSellItem().getNbt().get("StoredEnchantments")).get(0));
                             String id = enchantNBT.get("id").asString();
                             int lvl = Integer.parseInt(enchantNBT.get("lvl").asString().replace("s", ""));
-                            sb.append(Registry.ENCHANTMENT.get(new Identifier(id)).getName(lvl).getString());
+                            sb.append(Registries.ENCHANTMENT.get(new Identifier(id)).getName(lvl).getString());
                             //player.sendMessage(new LiteralText(Registry.ENCHANTMENT.get(new Identifier(id)).getName(lvl).getString() + ""), false);
                         }
                         else sb.append(offer.getSellItem().getItem().getName().getString());
@@ -166,7 +166,7 @@ public class WorldManager {
                                 String id = enchantNBT.get("id").asString();
                                 int lvl = Integer.parseInt(enchantNBT.get("lvl").asString().replace("s", ""));
 
-                                Enchantment found = Registry.ENCHANTMENT.get(new Identifier(id));
+                                Enchantment found = Registries.ENCHANTMENT.get(new Identifier(id));
                                 if(config.stopAtAnyMaxLevelTrade){
                                     if(lvl == found.getMaxLevel()){
                                         onFinish();
@@ -186,7 +186,7 @@ public class WorldManager {
 
                                 //player.sendMessage(new LiteralText("Enchanted Book: " + id + "; " + lvl), false);
                                 //player.sendMessage(new LiteralText(Registry.ENCHANTMENT.getId(found) + " | " + Registry.ENCHANTMENT.getId(config.enchantment)), false);
-                                if(Registry.ENCHANTMENT.getId(found).equals(Registry.ENCHANTMENT.getId(config.enchantment)) && (!config.perfectTrade || config.enchantment.getMaxLevel() == lvl)) {
+                                if(Registries.ENCHANTMENT.getId(found).equals(Registries.ENCHANTMENT.getId(config.enchantment)) && (!config.perfectTrade || config.enchantment.getMaxLevel() == lvl)) {
                                     if (config.perfectTrade) {
                                         if (offer.getOriginalFirstBuyItem().getCount() == getMinCost(config.enchantment)) {
                                             onFinish();

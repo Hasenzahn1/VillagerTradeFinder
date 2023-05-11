@@ -4,9 +4,10 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.VillagerEntity;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.village.VillagerProfession;
 import net.minecraft.world.poi.PointOfInterestType;
 
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 public class WorldHelper {
 
     public static boolean isValidWorkstation(BlockState blockState){
-        for(PointOfInterestType p : Registry.VILLAGER_PROFESSION.stream().map(VillagerProfession::id).map(WorldHelper::getPOIOfId).map(Registry.POINT_OF_INTEREST_TYPE::get).filter(Objects::nonNull).collect(Collectors.toList())){
+        for(PointOfInterestType p : Registries.VILLAGER_PROFESSION.stream().map(VillagerProfession::id).map(WorldHelper::getPOIOfId).map(Registries.POINT_OF_INTEREST_TYPE::get).filter(Objects::nonNull).collect(Collectors.toList())){
             if (p.contains(blockState)) return true;
         }
 
@@ -30,13 +31,21 @@ public class WorldHelper {
     }
 
     public static boolean isVillagerWorkstation(VillagerProfession villagerProfession, BlockState state){
-        PointOfInterestType poi = Registry.POINT_OF_INTEREST_TYPE.get(getPOIOfId(villagerProfession.id()));
+        PointOfInterestType poi = Registries.POINT_OF_INTEREST_TYPE.get(getPOIOfId(villagerProfession.id()));
         if(poi == null) return false;
         return poi.contains(state);
     }
 
+    /*
     public static RegistryKey<PointOfInterestType> getPOIOfId(String id) {
-        return RegistryKey.of(Registry.POINT_OF_INTEREST_TYPE_KEY, new Identifier(id));
+        return Registries.POINT_OF_INTEREST_TYPE.get(new Identifier(id));
+        return RegistryKey.of(Registries.POINT_OF_INTEREST_TYPE_KE, new Identifier(id));
+    }
+
+     */
+
+    public static RegistryKey<PointOfInterestType> getPOIOfId(String id) {
+        return RegistryKey.of(Registries.POINT_OF_INTEREST_TYPE.getKey(), new Identifier(id));
     }
 
     public static VillagerEntity getNearestVillager(VillagerEntity nearestVillager){
